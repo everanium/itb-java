@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# build.sh -- one-step build for the Java binding: libitb3.so + JNI
-# shim + jars via Gradle. Prerequisites (Go, JDK 17+, Gradle, gcc)
-# must be installed separately; see README.md "Prerequisites" section.
+# One-step build for the Java binding: libitb3.so + JNI shim + jars via
+# Gradle. Prerequisites (Go, JDK 17+, Gradle, gcc) must be installed
+# separately; see README.md "Prerequisites" section.
 #
 # The build starts from an empty tree: every artefact this binding
 # owns -- the Gradle build directory, the project-local Gradle cache,
@@ -110,14 +110,15 @@ go build -trimpath "${TAGS[@]}" -buildmode=c-shared \
     -o dist/linux-amd64/libitb3.so ./cmd/cshared
 
 cd "$BINDING_DIR"
-# assemble covers the library jar, the JNI shim, the bench jar and the
-# eitb jar (see build.gradle.kts: tasks.assemble dependsOn compileJni,
-# eitbJar, benchJar).
+# assemble covers the library jar, the JNI shim, the bench jar, the
+# eitb jar and the loop jar (see build.gradle.kts: tasks.assemble
+# dependsOn compileJni, eitbJar, benchJar, loopJar).
 echo "==> building Java binding (gradlew assemble)"
 ./gradlew --console=plain assemble
 
 require_built "$BINDING_DIR/build/jni/libitb3_jni.so"
 require_built "$BINDING_DIR/build/libs/eitb.jar"
 require_built "$BINDING_DIR/build/libs/bench.jar"
+require_built "$BINDING_DIR/build/libs/loop.jar"
 
 echo "==> ready: ./run_tests.sh"

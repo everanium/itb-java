@@ -43,11 +43,21 @@ final class Native {
     // ── auxiliaries ─────────────────────────────────────────────────
     static native int version(ByteBuffer out, long cap, long[] outLen);
 
+    static native int drbgAutoTier(ByteBuffer out, long cap, long[] outLen);
+
     static native int lastError(ByteBuffer out, long cap, long[] outLen);
 
     static native long setMemoryLimit(long limit);
 
     static native int setGCPercent(int pct);
+
+    static native int setGOMAXPROCS(int n);
+
+    static native int writeHeapProfile(ByteBuffer path);
+
+    static native int poolStatsLen();
+
+    static native int poolStats(ByteBuffer out, long capElems, long[] outLen);
 
     // ── Triple Pipeline lifecycle ───────────────────────────────────
     static native int tripleInit(ByteBuffer profile, ByteBuffer opts,
@@ -85,6 +95,8 @@ final class Native {
             long[] jsonLen);
 
     static native int tripleProfiles(ByteBuffer jsonOut, long jsonCap, long[] jsonLen);
+
+    static native int tripleHashNames(ByteBuffer jsonOut, long jsonCap, long[] jsonLen);
 
     // ── one-shot cipher calls ───────────────────────────────────────
     static native int tripleEncryptStream(long handle, ByteBuffer src, long srcLen,

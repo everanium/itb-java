@@ -1,4 +1,4 @@
-// Whole-buffer Stream throughput vs plaintext size (Streaming
+// One-shot stream throughput vs plaintext size (Streaming
 // Non-AEAD profile) at 1 MiB / 16 MiB / 64 MiB. Times
 // encryptStreamOneShot / decryptStreamOneShot, the single FFI
 // round-trip surface for callers holding the whole payload in
@@ -15,7 +15,7 @@ public final class BenchStreamOneShot {
     }
 
     public static void main(String[] args) {
-        // Bench-scale allocation churn leaks Go scratch heap
+        // Bench-scale allocation churn grows the Go scratch heap
         // unboundedly without a soft memory cap + aggressive GC; the
         // return values report the previous settings, not an error.
         io.github.everanium.itb3.Runtime.setMemoryLimit(4L << 30);

@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 #
-# run_bench.sh -- bench runner for the Java binding. Builds
-# libitb3.so + the binding via build.sh, then runs the bench mains
-# (BenchMessage + BenchStream + BenchStreamOneShot). Positional
-# arguments select the shape: `message`, `stream`, `stream_one_shot`,
-# or `all` (default).
+# Bench runner for the Java binding. Builds libitb3.so + the binding
+# via build.sh, then runs the bench mains (BenchMessage + BenchStream
+# + BenchStreamOneShot). Positional arguments select the shape:
+# `message`, `stream`, `stream_one_shot`, or `all` (default).
 #
 # build.sh wipes the whole build tree before it builds and asserts
 # build/libs/bench.jar was written by that invocation, so the classes
@@ -21,11 +20,9 @@ cd "$(dirname "$0")"
 
 export ITB_JNI_PATH="$PWD/build/jni/libitb3_jni.so"
 
-# Bench-hostile Go runtime defaults are capped at libitb3 load time
-# via env vars so a bench crash before the benches' own
-# setMemoryLimit / setGCPercent calls still runs under a bounded
-# heap. The benches themselves reassert these via the API for
-# self-contained reproducibility.
+# Go-runtime pacing defaults for bench-scale allocation churn; the
+# `:-` form respects any override set by the caller. The bench mains
+# apply the same caps programmatically.
 export ITB_GOMEMLIMIT="${ITB_GOMEMLIMIT:-4GiB}"
 export ITB_GOGC="${ITB_GOGC:-100}"
 

@@ -169,6 +169,13 @@ public final class Pipeline implements AutoCloseable, Destroyable {
         return Profile.stringsFromJson(Profile.utf8(json));
     }
 
+    /** The names of every hash primitive in the shipped registry, in
+     * the registry's own canonical order. */
+    public static List<String> hashNames() {
+        byte[] json = retryOnce(JSON_CAP, Native::tripleHashNames);
+        return Profile.stringsFromJson(Profile.utf8(json));
+    }
+
     /** The current self-describing session blob: the bytes
      * {@link #init} produced, the bytes {@link #load} re-marshalled,
      * or the bytes of the latest {@link #rekey}. */
@@ -410,7 +417,7 @@ public final class Pipeline implements AutoCloseable, Destroyable {
             // The writable window is dst.position()..dst.limit(); the
             // slice's own base address carries the position offset, and
             // its capacity caps the native write — libitb3 never writes
-            // past it (Ruby-style out-of-bounds guard).
+            // past it (out-of-bounds guard via direct buffer capacity).
             ByteBuffer window = dst.slice();
             long[] len = new long[1];
             ItbException.check(call.invoke(handle, in, src.length,
